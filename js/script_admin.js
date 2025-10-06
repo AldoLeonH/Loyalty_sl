@@ -3,6 +3,8 @@ const GOOGLE_SCRIPT_URL_ADMIN = "https://script.google.com/macros/s/AKfycbxljAeg
 const WHATSAPP_NUMBER_ADMIN = "5214561560813";
 
 
+
+
 const searchInput = document.getElementById('searchInput');
 const btnSearch = document.getElementById('btnSearch');
 const clientInfo = document.getElementById('clientInfo');
