@@ -1,1 +1,46 @@
-<!doctype html><html><head><title>Admin</title></head><body></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Saint Latte — Panel Barista (Admin)</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<main class="card">
+<h1>Panel Barista — Saint Latte</h1>
+<p class="subtitle">Busca cliente por teléfono o código. Registra compras y valida recompensas.</p>
+
+
+<div class="admin-controls">
+<input id="searchInput" placeholder="Buscar por teléfono o código" />
+<button id="btnSearch">Buscar</button>
+</div>
+
+
+<div id="clientInfo" class="hidden">
+<p>Cliente: <strong id="a_name"></strong></p>
+<p>Teléfono: <strong id="a_phone"></strong></p>
+<p>Código: <strong id="a_code"></strong></p>
+<p>Total gastado: $<strong id="a_total">0</strong></p>
+<p>Sellos: <strong id="a_stamps">0</strong> / 10</p>
+<p>Premio disponible: <strong id="a_reward">No</strong></p>
+
+
+<label for="adminAmount">Registrar monto (MXN)</label>
+<input id="adminAmount" type="number" min="1" step="1" placeholder="Ej. 250" />
+<button id="adminRegister">Registrar compra</button>
+
+
+<button id="resetStamps">Reiniciar sellos (Reclamo)</button>
+<button id="sendPromo">Enviar promoción por WhatsApp</button>
+</div>
+
+
+<div id="adminMsg" class="hidden"></div>
+</main>
+
+
+<script src="js/script_admin.js"></script>
+</body>
+</html>
