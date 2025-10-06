@@ -17,3 +17,29 @@ h1{margin:0 0 8px;font-size:20px}
 .admin-controls{display:flex;gap:8px}
 .admin-controls input{flex:1}
 .admin-controls button{flex:0}
+
+.admin-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.admin-controls input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.admin-controls button {
+  background: #6E7D60;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.admin-controls button:hover {
+  opacity: 0.9;
+}
