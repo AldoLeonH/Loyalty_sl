@@ -1,10 +1,10 @@
-// Admin simple que consulta y modifica la hoja vía Apps Script
+// -----------------------------
+// Configuración
+// -----------------------------
 const GOOGLE_SCRIPT_URL_ADMIN = "https://script.google.com/macros/s/AKfycbxljAegWUrg5kGKZdrWhgm9Valt4OPLhaZ0Fw1Cbi3Yxc9YxV9PhZZAYYfzg2OeZ_ZX/exec";
 const WHATSAPP_NUMBER_ADMIN = "5214561560813";
 
-
-
-
+// Elementos del DOM
 const searchInput = document.getElementById('searchInput');
 const btnSearch = document.getElementById('btnSearch');
 const clientInfo = document.getElementById('clientInfo');
@@ -19,55 +19,127 @@ const adminRegister = document.getElementById('adminRegister');
 const resetStampsBtn = document.getElementById('resetStamps');
 const sendPromoBtn = document.getElementById('sendPromo');
 
-
 let current = null;
 
-
-btnSearch.addEventListener('click', async ()=>{
-const q = searchInput.value.trim(); if(!q) return alert('Ingresa teléfono o código');
-// Llamada al Apps Script para buscar cliente
-try{
-const res = await fetch(GOOGLE_SCRIPT_URL_ADMIN + '?action=get&query=' + encodeURIComponent(q));
-const data = await res.json();
-if(data && data.found){
-current = data.client;
-showClient(current);
-} else { alert('Cliente no encontrado'); }
-}catch(e){ alert('Error buscando cliente. Revisa la URL del Apps Script en el archivo.'); }
-});
-
-
-function showClient(c){ clientInfo.classList.remove('hidden'); a_name.textContent = c.name; a_phone.textContent = c.phone; a_code.textContent = c.code; a_total.textContent = c.total; a_stamps.textContent = c.stamps; a_reward.textContent = c.stamps>=10? 'Sí' : 'No'; }
-
-
-adminRegister.addEventListener('click', async ()=>{
-if(!current) return alert('Busca un cliente primero');
-const monto = parseFloat(adminAmount.value); if(!monto || monto<=0) return alert('Monto inválido');
-try{
-const res = await fetch(GOOGLE_SCRIPT_URL_ADMIN, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'register', code:current.code, name:current.name, phone:current.phone, amount:monto}) });
-const data = await res.json();
-if(data.ok){ current = data.client; showClient(current); // notificar cliente local si está abierto
-// si la misma máquina está con el cliente, intenta actualizar
-if(window.opener && window.opener.applyResetFromServer) window.opener.applyResetFromServer(current);
+// -----------------------------
+// Función para mostrar cliente
+// -----------------------------
+function showClient(c) {
+    clientInfo.classList.remove('hidden');
+    a_name.textContent = c.name;
+    a_phone.textContent = c.phone;
+    a_code.textContent = c.code;
+    a_total.textContent = c.total;
+    a_stamps.textContent = c.stamps;
+    a_reward.textContent = c.stamps >= 10 ? 'Sí' : 'No';
 }
-}catch(e){ alert('Error al registrar compra'); }
+
+// -----------------------------
+// Buscar cliente
+// -----------------------------
+btnSearch.addEventListener('click', async () => {
+    const q = searchInput.value.trim();
+    if (!q) return alert('Ingresa teléfono o código');
+
+    try {
+        const res = await fetch(`${GOOGLE_SCRIPT_URL_ADMIN}?action=get&query=${encodeURIComponent(q)}`);
+        const data = await res.json();
+
+        if (data && data.found) {
+            current = data.client;
+            showClient(current);
+        } else {
+            alert('Cliente no encontrado');
+        }
+    } catch (e) {
+        alert('Error buscando cliente. Revisa la URL del Apps Script.');
+        console.error(e);
+    }
 });
 
+// -----------------------------
+// Registrar compra
+// -----------------------------
+adminRegister.addEventListener('click', async () => {
+    if (!current) return alert('Busca un cliente primero');
 
-resetStampsBtn.addEventListener('click', async ()=>{
-if(!current) return alert('Busca un cliente primero');
-if(!confirm('¿Confirmas reiniciar los sellos de este cliente?')) return;
-try{
-const res = await fetch(GOOGLE_SCRIPT_URL_ADMIN, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'reset', code:current.code}) });
-const data = await res.json();
-if(data.ok){ current = data.client; showClient(current); alert('Sellos reiniciados'); }
-}catch(e){ alert('Error al reiniciar'); }
+    const monto = parseFloat(adminAmount.value);
+    if (!monto || monto <= 0) return alert('Monto inválido');
+
+    try {
+        const formData = new URLSearchParams();
+        formData.append('action', 'register');
+        formData.append('code', current.code);
+        formData.append('name', current.name);
+        formData.append('phone', current.phone);
+        formData.append('amount', monto);
+
+        const res = await fetch(GOOGLE_SCRIPT_URL_ADMIN, {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await res.json();
+
+        if (data.ok) {
+            current = data.client;
+            showClient(current);
+            alert('Compra registrada correctamente');
+
+            // Si la ventana padre tiene función para actualizar
+            if (window.opener && window.opener.applyResetFromServer) {
+                window.opener.applyResetFromServer(current);
+            }
+        } else {
+            alert('No se pudo registrar la compra');
+        }
+
+    } catch (e) {
+        alert('Error al registrar compra');
+        console.error(e);
+    }
 });
 
+// -----------------------------
+// Reiniciar sellos
+// -----------------------------
+resetStampsBtn.addEventListener('click', async () => {
+    if (!current) return alert('Busca un cliente primero');
+    if (!confirm('¿Confirmas reiniciar los sellos de este cliente?')) return;
 
-sendPromoBtn.addEventListener('click', ()=>{
-if(!current) return alert('Busca un cliente primero');
-const msg = `Hola ${encodeURIComponent(current.name)}, en Saint Latte Valle de Stgo tenemos novedades!`;
-const url = `https://wa.me/${WHATSAPP_NUMBER_ADMIN}?text=${msg}`;
-window.open(url,'_blank');
+    try {
+        const formData = new URLSearchParams();
+        formData.append('action', 'reset');
+        formData.append('code', current.code);
+
+        const res = await fetch(GOOGLE_SCRIPT_URL_ADMIN, {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await res.json();
+
+        if (data.ok) {
+            current = data.client;
+            showClient(current);
+            alert('Sellos reiniciados');
+        } else {
+            alert('No se pudieron reiniciar los sellos');
+        }
+
+    } catch (e) {
+        alert('Error al reiniciar');
+        console.error(e);
+    }
+});
+
+// -----------------------------
+// Enviar promo por WhatsApp
+// -----------------------------
+sendPromoBtn.addEventListener('click', () => {
+    if (!current) return alert('Busca un cliente primero');
+
+    const msg = `Hola ${encodeURIComponent(current.name)}, en Saint Latte Valle de Stgo tenemos novedades!`;
+    const url = `https://wa.me/${WHATSAPP_NUMBER_ADMIN}?text=${msg}`;
+    window.open(url, '_blank');
 });
