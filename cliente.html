@@ -1,46 +1,30 @@
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Saint Latte — Tarjeta de Lealtad (Cliente)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Saint Latte - Cliente</title>
 <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 <main class="card">
 <h1>Saint Latte — Tarjeta de Lealtad</h1>
-<p class="subtitle">Regístrate con tu nombre y teléfono. Tus sellos se calculan por cada $100 de consumo.</p>
-
-
-<form id="registerForm" class="form">
+<form id="registerForm">
 <input id="fullName" placeholder="Nombre completo" required />
-<input id="phone" placeholder="Teléfono (ej. 4561560813)" required />
+<input id="phone" placeholder="Teléfono" required />
 <button type="submit">Crear/Entrar</button>
 </form>
-
-
 <div id="profile" class="hidden">
 <div id="qr-container"></div>
 <p>Cliente: <strong id="displayName"></strong></p>
 <p>Código: <strong id="clientCode"></strong></p>
-<p>Sellos: <strong id="stamps">0</strong> / 10</p>
-
-
-<label for="amount">Registrar monto de compra (MXN)</label>
-<input id="amount" type="number" min="1" step="1" placeholder="Ej. 250" />
-<button id="registerPurchase">Registrar compra (Barista)</button>
-
-
+<p>Sellos: <strong id="stamps">0</strong>/10</p>
+<label for="amount">Registrar monto (MXN)</label>
+<input id="amount" type="number" min="1" placeholder="Ej. 250" />
+<button id="registerPurchase">Registrar compra</button>
 <div id="reward" class="hidden"></div>
-
-
 <button id="sendWhatsApp">Enviar por WhatsApp</button>
 </div>
-
-
-<p class="hint">Diseño: Saint Latte Valle de Stgo — estilo beige & verde oliva.</p>
-</main>
-
-
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script src="js/script_cliente.js"></script>
 </body>
