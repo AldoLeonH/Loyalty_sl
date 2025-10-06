@@ -1,57 +1,271 @@
 <!DOCTYPE html>
+
+
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registro - Saint Latte</title>
+
+
+  <meta charset="UTF-8">
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <title>Registro - Saint Latte</title>
+
+
+  <style>
+
+
+    body {
+
+
+      font-family: "Poppins", sans-serif;
+
+
+      background-color: #f8f5f0;
+
+
+      display: flex;
+
+
+      justify-content: center;
+
+
+      align-items: center;
+
+
+      height: 100vh;
+
+
+    }
+
+
+    .form-container {
+
+
+      background: white;
+
+
+      padding: 2rem;
+
+
+      border-radius: 15px;
+
+
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+
+
+      width: 320px;
+
+
+    }
+
+
+    h2 {
+
+
+      color: #556b2f;
+
+
+      text-align: center;
+
+
+    }
+
+
+    input {
+
+
+      width: 100%;
+
+
+      padding: 10px;
+
+
+      margin: 8px 0;
+
+
+      border-radius: 8px;
+
+
+      border: 1px solid #ccc;
+
+
+      box-sizing: border-box;
+
+
+    }
+
+
+    button {
+
+
+      background-color: #6b705c;
+
+
+      color: white;
+
+
+      border: none;
+
+
+      padding: 10px;
+
+
+      border-radius: 8px;
+
+
+      width: 100%;
+
+
+      cursor: pointer;
+
+
+      font-weight: bold;
+
+
+    }
+
+
+    button:hover {
+
+
+      background-color: #a5a58d;
+
+
+    }
+
+
+  </style>
+
 </head>
+
 <body>
-  <h2>Registro</h2>
-  <form id="registerForm">
-    <input type="text" id="name" placeholder="Nombre completo" required>
-    <input type="text" id="phone" placeholder="Teléfono (10 dígitos)" required>
-    <input type="password" id="password" placeholder="Contraseña" required>
-    <button type="submit">Registrar</button>
-  </form>
-  <p id="message"></p>
+
+
+  <div class="form-container">
+
+
+    <h2>Registro</h2>
+
+
+    <form id="registerForm">
+
+
+      <input type="text" id="name" placeholder="Nombre completo" required>
+
+
+      <input type="text" id="phone" placeholder="Teléfono (10 dígitos)" required>
+
+
+      <input type="password" id="password" placeholder="Contraseña" required>
+
+
+      <button type="submit">Registrar</button>
+
+
+    </form>
+
+
+    <p id="message" style="text-align:center;margin-top:10px;"></p>
+
+
+  </div>
+
+
 
   <script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxljAegWUrg5kGKZdrWhgm9Valt4OPLhaZ0Fw1Cbi3Yxc9YxV9PhZZAYYfzg2OeZ_ZX/exec";
+
+
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxljAegWUrg5kGKZdrWhgm9Valt4OPLhaZ0Fw1Cbi3Yxc9YxV9PhZZAYYfzg2OeZ_ZX/exec"; // tu URL real
+
+
 
     document.getElementById("registerForm").addEventListener("submit", async (e) => {
+
       e.preventDefault();
+
+
+
+
       const name = document.getElementById("name").value.trim();
-      let phone = document.getElementById("phone").value.trim().replace(/\D/g,"");
+
+
+      let phone = document.getElementById("phone").value.trim();
+
       const password = document.getElementById("password").value.trim();
+
       const message = document.getElementById("message");
 
+
+
+
+      // Limpieza del número
+
+
+      phone = phone.replace(/\D/g, ""); // elimina todo lo que no sea número
+
+
+
+
       if (phone.length < 10) {
-        message.textContent = "Ingresa un teléfono válido (10 dígitos).";
+
+
+        message.textContent = "Por favor ingresa un número válido (10 dígitos).";
+
         message.style.color = "red";
+
         return;
+
       }
 
-      const formData = new URLSearchParams();
-      formData.append("action","register");
+
+
+
+      const formData = new FormData();
+
+
+      formData.append("action", "register");
+
       formData.append("name", name);
+
       formData.append("phone", phone);
+
       formData.append("password", password);
 
+
+
       try {
-        const res = await fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData });
-        const result = await res.text();
-        message.textContent = result;
+
+
+        const response = await fetch(scriptURL, { method: "POST", body: formData });
+
+
+        const result = await response.text();
+
+
+        message.textContent = result.includes("exitosamente")
+
+
+          ? "Registro exitoso ✅"
+
+
+          : result;
+
         message.style.color = result.includes("exitosamente") ? "green" : "red";
 
-        // Redirigir si se registró correctamente
-        if(result.includes("exitosamente")) {
-          setTimeout(()=>{ window.location.href = "dashboard.html"; }, 1000);
-        }
-      } catch(err) {
+
+      } catch (error) {
+
+
+
+
+
+
         message.textContent = "Error al registrar. Intenta de nuevo.";
+
         message.style.color = "red";
+
       }
-    });
-  </script>
-</body>
-</html>
