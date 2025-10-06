@@ -1,4 +1,4 @@
-const GOOGLE_SCRIPT_URL = "REPLACE_WITH_YOUR_APPS_SCRIPT_URL"; // pegarás la URL aquí
+const GOOGLE_SCRIPT_URL_ADMIN = "https://script.google.com/macros/s/AKfycbxVUZFUKZM53ix9KUOrPao23z1oIeI-CoAeMFt9EN7WjhnH_icgHkRc7ZV2ChoIOuxO/exec"; // pegarás la URL aquí
 }
 
 
