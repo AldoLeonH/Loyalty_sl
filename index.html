@@ -20,10 +20,7 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     width: 320px;
   }
-  h2 {
-    color: #556b2f;
-    text-align: center;
-  }
+  h2 { color: #556b2f; text-align: center; }
   input {
     width: 100%;
     padding: 10px;
@@ -42,13 +39,8 @@
     cursor: pointer;
     font-weight: bold;
   }
-  button:hover {
-    background-color: #a5a58d;
-  }
-  #message {
-    text-align:center;
-    margin-top:10px;
-  }
+  button:hover { background-color: #a5a58d; }
+  #message { text-align:center; margin-top:10px; }
 </style>
 </head>
 <body>
@@ -59,6 +51,8 @@
     <input type="text" id="name" placeholder="Nombre completo" required>
     <input type="text" id="phone" placeholder="Teléfono (10 dígitos)" required>
     <input type="password" id="password" placeholder="Contraseña" required>
+    <input type="email" id="email" placeholder="Correo electrónico">
+    <input type="date" id="birth" placeholder="Fecha de nacimiento">
     <button type="submit">Registrar</button>
   </form>
   <p id="message"></p>
@@ -73,6 +67,8 @@
     const name = document.getElementById("name").value.trim();
     let phone = document.getElementById("phone").value.trim().replace(/\D/g,"");
     const password = document.getElementById("password").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const birth = document.getElementById("birth").value;
     const message = document.getElementById("message");
 
     if(phone.length < 10){
@@ -87,26 +83,24 @@
     formData.append("name", name);
     formData.append("phone", phone);
     formData.append("password", password);
+    formData.append("email", email);
+    formData.append("birth", birth);
 
     try {
-      const response = await fetch(scriptURL, {
-        method: "POST",
-        body: formData
-      });
+      const response = await fetch(scriptURL, { method: "POST", body: formData });
       const result = await response.text();
 
       if(result.includes("exitosamente")){
-        message.textContent = "Registro exitoso ✅";
+        message.textContent = result;
         message.style.color = "green";
-
-        // Redirigir al dashboard después de 1 segundo
+        // Redirigir al dashboard después de 1s
         setTimeout(()=>{ window.location.href = "dashboard.html"; }, 1000);
       } else {
         message.textContent = result;
         message.style.color = "red";
       }
 
-    } catch(err) {
+    } catch(err){
       message.textContent = "Error al registrar. Intenta de nuevo.";
       message.style.color = "red";
     }
