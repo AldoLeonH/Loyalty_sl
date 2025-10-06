@@ -1,5 +1,5 @@
 // Admin simple que consulta y modifica la hoja vía Apps Script
-const GOOGLE_SCRIPT_URL_ADMIN = "https://script.google.com/macros/s/AKfycbxVUZFUKZM53ix9KUOrPao23z1oIeI-CoAeMFt9EN7WjhnH_icgHkRc7ZV2ChoIOuxO/exec";
+const GOOGLE_SCRIPT_URL_ADMIN = "https://script.google.com/macros/s/AKfycbxljAegWUrg5kGKZdrWhgm9Valt4OPLhaZ0Fw1Cbi3Yxc9YxV9PhZZAYYfzg2OeZ_ZX/exec";
 const WHATSAPP_NUMBER_ADMIN = "5214561560813";
 
 
