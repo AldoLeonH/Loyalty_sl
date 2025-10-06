@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - Saint Latte</title>
+<style>
+  body {
+    font-family: "Poppins", sans-serif;
+    background-color: #f8f5f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .dashboard-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    width: 350px;
+    text-align: center;
+  }
+  h2 { color: #556b2f; }
+  p { font-size: 1rem; margin: 10px 0; }
+  .nutrias {
+    font-size: 1.5rem;
+    margin: 10px 0;
+  }
+  .reward {
+    color: green;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<div class="dashboard-container">
+  <h2>Bienvenido, <span id="name"></span>!</h2>
+  <p>Teléfono: <span id="phone"></span></p>
+  <p>Última visita: <span id="lastVisit"></span></p>
+  <p>Última compra: $<span id="lastPurchase"></span></p>
+  <div class="nutrias">Nutrias: <span id="nutrias">0</span>/10 🦦</div>
+  <p id="rewardMsg" class="reward"></p>
+</div>
+
+<script>
+  const scriptURL = "https://script.google.com/macros/s/AKfycbxljAegWUrg5kGKZdrWhgm9Valt4OPLhaZ0Fw1Cbi3Yxc9YxV9PhZZAYYfzg2OeZ_ZX/exec";
+
+  // El teléfono puede venir de localStorage si ya lo guardaste al registrarse
+  const phone = localStorage.getItem("clientPhone");
+  if(!phone){
+    alert("No se encontró el teléfono del cliente. Por favor regístrate primero.");
+  } else {
+    fetch(`${scriptURL}?action=getDashboard&phone=${encodeURIComponent(phone)}`)
+    .then(res => res.json())
+    .then(data => {
+      if(!data.ok){
+        alert(data.error);
+        return;
+      }
+      document.getElementById("name").textContent = data.name;
+      document.getElementById("phone").textContent = data.phone;
+      document.getElementById("lastVisit").textContent = new Date(data.lastVisit).toLocaleDateString();
+      document.getElementById("lastPurchase").textContent = data.lastPurchase;
+      document.getElementById("nutrias").textContent = data.nutrias;
+
+      if(data.nutrias >= 10){
+        document.getElementById("rewardMsg").textContent = "¡Felicidades! Tienes una bebida gratis 🦦🥤";
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Error al cargar el dashboard.");
+    });
+  }
+</script>
+
+</body>
+</html>
