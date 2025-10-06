@@ -35,9 +35,15 @@ saveLocal(); renderProfile();
 
 
 // enviar al Google Script para persistir
-if(GOOGLE_SCRIPT_URL!=='https://script.google.com/macros/s/AKfycbxljAegWUrg5kGKZdrWhgm9Valt4OPLhaZ0Fw1Cbi3Yxc9YxV9PhZZAYYfzg2OeZ_ZX/exec'){
-fetch(GOOGLE_SCRIPT_URL, { method:'POST', mode:'no-cors', body: JSON.stringify({action:'register', code:client.code, name:client.name, phone:client.phone, amount:monto}) });
-}
+fetch(GOOGLE_SCRIPT_URL_ADMIN, {
+  method: 'POST',
+  body: JSON.stringify({
+    action: 'register',
+    code: client.code,
+    name: client.name,
+    phone: client.phone,
+    amount: monto
+  })
 });
 
 
