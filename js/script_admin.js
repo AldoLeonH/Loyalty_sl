@@ -1,0 +1,1 @@
+// script admin con URL de Apps Script
