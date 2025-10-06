@@ -1,175 +1,102 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Saint Latte — Registro</title>
-<link rel="stylesheet" href="css/style.css" />
-<style>
-  body {
-    background-color: #f7f3e9;
-    font-family: 'League Spartan', sans-serif;
-    color: #2e3b2d;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-  }
-  .sign-form {
-    background: rgba(255,255,255,0.9);
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    width: 90%;
-    max-width: 420px;
-  }
-  .sign-form h1 {
-    text-align: center;
-    color: #3b4a3f;
-    margin-bottom: 20px;
-    font-size: 1.6rem;
-  }
-  label { display: block; margin-top: 10px; font-size: 0.9rem; }
-  input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-  }
-  .pw-wrap { display: flex; align-items: center; gap: 8px; }
-  #togglePw {
-    padding: 10px 14px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background: #fff;
-    cursor: pointer;
-  }
-  button[type="submit"] {
-    width: 100%;
-    margin-top: 20px;
-    background: #7c8c76;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-  button[type="submit"]:hover {
-    background: #6b7c66;
-  }
-  .hint { text-align: center; font-size: 0.8rem; color: #666; margin-top: 8px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - Saint Latte</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #f8f5f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 320px;
+    }
+    h2 {
+      color: #556b2f;
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #6b705c;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      width: 100%;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #a5a58d;
+    }
+  </style>
 </head>
 <body>
+  <div class="form-container">
+    <h2>Registro</h2>
+    <form id="registerForm">
+      <input type="text" id="name" placeholder="Nombre completo" required>
+      <input type="text" id="phone" placeholder="Teléfono (10 dígitos)" required>
+      <input type="password" id="password" placeholder="Contraseña" required>
+      <button type="submit">Registrar</button>
+    </form>
+    <p id="message" style="text-align:center;margin-top:10px;"></p>
+  </div>
 
-<main>
-  <form id="registerForm" class="sign-form">
-    <h1>Saint Latte</h1>
-    <label for="fullName">Nombre completo</label>
-    <input id="fullName" name="fullName" required placeholder="Ej. Juan Pérez" />
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxljAegWUrg5kGKZdrWhgm9Valt4OPL/exec"; // tu URL real
 
-    <label for="phone">Teléfono</label>
-    <input id="phone" name="phone" required pattern="\\d{10,15}" placeholder="Ej. 5512345678" />
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    <label for="password">Contraseña</label>
-    <div class="pw-wrap">
-      <input id="password" name="password" type="password" required minlength="6" placeholder="Mínimo 6 caracteres" />
-      <button type="button" id="togglePw">Mostrar</button>
-    </div>
+      const name = document.getElementById("name").value.trim();
+      let phone = document.getElementById("phone").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const message = document.getElementById("message");
 
-    <button type="submit">Entrar / Registrar</button>
-    <p class="hint">Tus datos están seguros. Solo se usan para identificarte.</p>
-  </form>
-</main>
+      // Limpieza del número
+      phone = phone.replace(/\D/g, ""); // elimina todo lo que no sea número
 
-<script>
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxljAegWUrg5kGKZdrWhgm9Valt4OPLhaZ0Fw1Cbi3Yxc9YxV9PhZZAYYfzg2OeZ_ZX/exec";
+      if (phone.length < 10) {
+        message.textContent = "Por favor ingresa un número válido (10 dígitos).";
+        message.style.color = "red";
+        return;
+      }
 
-// Función para crear un código único (como en tu app actual)
-function makeCode() {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let code = 'SL-';
-  for (let i = 0; i < 6; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
-  return code;
-}
+      const formData = new FormData();
+      formData.append("action", "register");
+      formData.append("name", name);
+      formData.append("phone", phone);
+      formData.append("password", password);
 
-function saveLocal(client) {
-  localStorage.setItem('sl_client', JSON.stringify(client));
-}
-
-function loadLocal() {
-  const stored = localStorage.getItem('sl_client');
-  return stored ? JSON.parse(stored) : null;
-}
-
-// Mostrar/Ocultar contraseña
-document.getElementById('togglePw').addEventListener('click', ()=>{
-  const pw = document.getElementById('password');
-  pw.type = pw.type === 'password' ? 'text' : 'password';
-});
-
-// Manejo del formulario
-document.getElementById('registerForm').addEventListener('submit', async (e)=>{
-  e.preventDefault();
-
-  const name = document.getElementById('fullName').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const password = document.getElementById('password').value.trim();
-
-  if(!name || !phone || !password) {
-    alert("Por favor completa todos los campos.");
-    return;
-  }
-
-  let client = loadLocal();
-
-  if(!client || client.phone !== phone){
-    // Nuevo cliente o teléfono diferente
-    client = { code: makeCode(), name, phone, password, total: 0, stamps: 0 };
-  } else {
-    // Ya existe, solo actualiza nombre o contraseña
-    client.name = name;
-    client.password = password;
-  }
-
-  saveLocal(client);
-
-  // Registrar en Google Sheet
-  try {
-    const res = await fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "register",
-        code: client.code,
-        name: client.name,
-        phone: client.phone,
-        amount: 0
-      })
+      try {
+        const response = await fetch(scriptURL, { method: "POST", body: formData });
+        const result = await response.text();
+        message.textContent = result.includes("exitosamente")
+          ? "Registro exitoso ✅"
+          : result;
+        message.style.color = result.includes("exitosamente") ? "green" : "red";
+      } catch (error) {
+        message.textContent = "Error al registrar. Intenta de nuevo.";
+        message.style.color = "red";
+      }
     });
-
-    const data = await res.json();
-    if (data.ok) {
-      saveLocal(data.client);
-      alert(`Bienvenido ${client.name}. Tu código es ${client.code}`);
-      window.location.href = "perfil.html"; // Página siguiente
-    } else {
-      alert("Error al registrar en el servidor.");
-    }
-  } catch (err) {
-    console.error(err);
-    alert("No se pudo conectar con el servidor. Intenta de nuevo.");
-  }
-});
-
-// Si ya hay sesión local, redirige
-const existing = loadLocal();
-if (existing) {
-  window.location.href = "perfil.html";
-}
-</script>
+  </script>
 </body>
 </html>
