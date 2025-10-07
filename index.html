@@ -1,111 +1,325 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registro - Saint Latte</title>
-<style>
-  body {
-    font-family: "Poppins", sans-serif;
-    background-color: #f8f5f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  .form-container {
-    background: white;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    width: 320px;
-  }
-  h2 { color: #556b2f; text-align: center; }
-  input {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-  }
-  button {
-    background-color: #6b705c;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 8px;
-    width: 100%;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  button:hover { background-color: #a5a58d; }
-  #message { text-align:center; margin-top:10px; }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Saint Latte — Registro de Clientes</title>
+
+  <!-- League Spartan -->
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --olive-900: #23311a;
+      --olive-700: #2f5a32;
+      --olive-500: #567a4f;
+      --cream: #f6f4ef;
+      --muted: #7a7a7a;
+      --glass: rgba(255,255,255,0.06);
+      --radius: 14px;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family: 'League Spartan', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, #fffefa 0%, #f3f6f2 100%);
+      color: var(--olive-900);
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .card{
+      width:100%;
+      max-width:920px;
+      background: white;
+      border-radius:20px;
+      box-shadow: 0 8px 30px rgba(20,20,20,0.08);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns: 420px 1fr;
+    }
+
+    .brand {
+      background: linear-gradient(180deg, var(--olive-700), var(--olive-500));
+      color: var(--cream);
+      padding:28px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:flex-start;
+      justify-content:center;
+    }
+    .brand h1{
+      margin:0;
+      font-size:28px;
+      letter-spacing:1px;
+    }
+    .brand p{
+      margin:0;
+      opacity:0.95;
+    }
+    .logo-circle{
+      width:56px;
+      height:56px;
+      border-radius:50%;
+      background: rgba(255,255,255,0.12);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:20px;
+    }
+
+    .form-wrap{
+      padding:28px;
+    }
+    form {
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .row {
+      display:flex;
+      gap:12px;
+    }
+    .row .field{flex:1}
+    .field label{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    input[type="text"], input[type="tel"], input[type="email"], input[type="date"], input[type="number"], textarea {
+      width:100%;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid #e6e6e6;
+      font-size:14px;
+      background: #fff;
+    }
+    textarea { min-height:80px; resize:vertical; padding-top:10px; }
+
+    .small {
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .actions {
+      display:flex;
+      gap:12px;
+      margin-top:8px;
+      align-items:center;
+    }
+    button {
+      background: linear-gradient(90deg, var(--olive-700), var(--olive-500));
+      color:var(--cream);
+      border:none;
+      padding:10px 16px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:700;
+    }
+    button.secondary {
+      background:transparent;
+      color:var(--olive-700);
+      border:1px solid #e6e6e6;
+      font-weight:600;
+    }
+
+    .status {
+      margin-left:auto;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .hint {
+      font-size:12px;
+      color:#9b9b9b;
+      margin-top:6px;
+    }
+
+    .notice {
+      padding:10px;
+      background:#fff8e6;
+      border-radius:8px;
+      border:1px solid #fde8b5;
+      color:#7a5a00;
+      font-size:13px;
+    }
+
+    @media (max-width:880px){
+      .card{grid-template-columns:1fr; padding:0}
+      .brand{border-radius:0 0 0 0}
+    }
+  </style>
 </head>
 <body>
+  <div class="card" role="main">
+    <div class="brand" aria-hidden="false">
+      <div class="logo-circle">SL</div>
+      <h1>Saint Latte</h1>
+      <p>Registro de clientes · Nutrias como estrellas</p>
+      <div class="hint">Añade clientes, actualiza datos y controla cuántas "nutrias" tienen.</div>
+    </div>
 
-<div class="form-container">
-  <h2>Registro</h2>
-  <form id="registerForm">
-    <input type="text" id="name" placeholder="Nombre completo" required>
-    <input type="text" id="phone" placeholder="Teléfono (10 dígitos)" required>
-    <input type="password" id="password" placeholder="Contraseña" required>
-    <input type="email" id="email" placeholder="Correo electrónico">
-    <input type="date" id="birth" placeholder="Fecha de nacimiento">
-    <button type="submit">Registrar</button>
-  </form>
-  <p id="message"></p>
-</div>
+    <div class="form-wrap">
+      <!-- <div class="notice">Importante: reemplaza la URL del script por la tuya antes de usar. El sistema evita duplicados por teléfono.</div> -->
 
-<script>
-  const scriptURL = "https://script.google.com/macros/s/AKfycbxljAegWUrg5kGKZdrWhgm9Valt4OPLhaZ0Fw1Cbi3Yxc9YxV9PhZZAYYfzg2OeZ_ZX/exec";
+      <form id="clientForm">
+        <div class="row">
+          <div class="field">
+            <label for="name">Nombre</label>
+            <input id="name" name="name" type="text" required placeholder="Ej: Juan Pérez">
+          </div>
+          <div class="field">
+            <label for="phone">Teléfono</label>
+            <input id="phone" name="phone" type="tel" required placeholder="5512345678" pattern="[0-9()+ -]*">
+          </div>
+        </div>
 
-  document.getElementById("registerForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+        <div class="row">
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="ejemplo@correo.com">
+          </div>
+          <div class="field">
+            <label for="birthday">Cumpleaños</label>
+            <input id="birthday" name="birthday" type="date">
+          </div>
+        </div>
 
-    const name = document.getElementById("name").value.trim();
-    let phone = document.getElementById("phone").value.trim().replace(/\D/g,"");
-    const password = document.getElementById("password").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const birth = document.getElementById("birth").value;
-    const message = document.getElementById("message");
+        <div class="row">
+          <div class="field">
+            <label for="password">Contraseña (opcional)</label>
+            <input id="password" name="password" type="text" placeholder="campo para nota/clave">
+          </div>
+          <div class="field">
+            <label for="otters">Nutrias (estrellas)</label>
+            <input id="otters" name="otters" type="number" min="0" max="999" value="0">
+          </div>
+        </div>
 
-    if(phone.length < 10){
-      message.textContent = "Por favor ingresa un número válido (10 dígitos).";
-      message.style.color = "red";
-      return;
-    }
+        <div class="row">
+          <div class="field">
+            <label for="address">Dirección</label>
+            <input id="address" name="address" type="text" placeholder="Colonia, calle, etc.">
+          </div>
+          <div class="field">
+            <label for="favorite_drink">Bebida favorita</label>
+            <input id="favorite_drink" name="favorite_drink" type="text" placeholder="Ej: Cold Brew">
+          </div>
+        </div>
 
-    // URLSearchParams compatible con Apps Script
-    const formData = new URLSearchParams();
-    formData.append("action", "register");
-    formData.append("name", name);
-    formData.append("phone", phone);
-    formData.append("password", password);
-    formData.append("email", email);
-    formData.append("birth", birth);
+        <div>
+          <label for="notes">Notas</label>
+          <textarea id="notes" name="notes" placeholder="Notas adicionales"></textarea>
+        </div>
 
-    try {
-      const response = await fetch(scriptURL, { method: "POST", body: formData });
-      const result = await response.text();
+        <div class="actions">
+          <button id="submitBtn" type="submit">Registrar</button>
+          <button id="clearBtn" type="button" class="secondary">Limpiar</button>
+          <div class="status" id="statusText">—</div>
+        </div>
 
-      if(result.includes("exitosamente")){
-        message.textContent = result;
-        message.style.color = "green";
-        // Redirigir al dashboard después de 1s
-        setTimeout(()=>{ window.location.href = "dashboard.html"; }, 1000);
-      } else {
-        message.textContent = result;
-        message.style.color = "red";
+        <div class="hint" style="margin-top:10px;">
+          Al ingresar un teléfono existente, el sistema actualizará los datos en lugar de duplicarlos.
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Reemplaza por tu URL de despliegue del Apps Script
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxljAegWUrg5kGKZdrWhgm9Valt4OPLhaZ0Fw1Cbi3Yxc9YxV9PhZZAYYfzg2OeZ_ZX/exec";
+
+    const form = document.getElementById('clientForm');
+    const phoneInput = document.getElementById('phone');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusText = document.getElementById('statusText');
+    const clearBtn = document.getElementById('clearBtn');
+
+    let phoneExists = false;
+
+    phoneInput.addEventListener('blur', async () => {
+      const phone = phoneInput.value.trim();
+      if (!phone) return;
+      setStatus('Comprobando número...');
+      try {
+        const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=check&phone=${encodeURIComponent(phone)}`);
+        const json = await res.json();
+        if (json.exists) {
+          phoneExists = true;
+          submitBtn.textContent = 'Actualizar';
+          setStatus('Número existente — actualizará los datos.');
+        } else {
+          phoneExists = false;
+          submitBtn.textContent = 'Registrar';
+          setStatus('Número disponible.');
+        }
+      } catch (err) {
+        setStatus('Error al comprobar número.');
+        console.error(err);
       }
+    });
 
-    } catch(err){
-      message.textContent = "Error al registrar. Intenta de nuevo.";
-      message.style.color = "red";
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      submitBtn.disabled = true;
+      setStatus('Enviando...');
+      const formData = new URLSearchParams();
+      formData.append('action','register');
+      formData.append('name', document.getElementById('name').value.trim());
+      formData.append('phone', document.getElementById('phone').value.trim());
+      formData.append('password', document.getElementById('password').value.trim());
+      formData.append('email', document.getElementById('email').value.trim());
+      formData.append('birthday', document.getElementById('birthday').value);
+      formData.append('otters', document.getElementById('otters').value);
+      formData.append('address', document.getElementById('address').value.trim());
+      formData.append('favorite_drink', document.getElementById('favorite_drink').value.trim());
+      formData.append('notes', document.getElementById('notes').value.trim());
+
+      try {
+        const res = await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+          body: formData.toString()
+        });
+        const json = await res.json();
+        if (json && json.success) {
+          if (json.updated) {
+            setStatus('⚠️ Este número ya estaba registrado');
+          } else {
+            setStatus('Usuario registrado correctamente.');
+          }
+          // opcional: limpiar form
+          // form.reset();
+        } else {
+          setStatus('Error: ' + (json.message || json.error || 'Respuesta no esperada'));
+        }
+      } catch (err) {
+        console.error(err);
+        setStatus('Error al conectar con el script.');
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      form.reset();
+      phoneExists = false;
+      submitBtn.textContent = 'Registrar';
+      setStatus('Formulario limpio.');
+    });
+
+    function setStatus(msg){
+      statusText.textContent = msg;
     }
-  });
-</script>
 
+    // Previene enviar dos números iguales desde cliente (adicional)
+    // en caso de querer bloquear registro (en vez de actualizar), podríamos deshabilitar submit
+    // cuando phoneExists === true. Actualmente dejamos la opción de actualizar.
+  </script>
 </body>
 </html>

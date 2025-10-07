@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Saint Latte — Iniciar sesión</title>
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --olive-700: #2f5a32;
+  --olive-500: #567a4f;
+  --cream: #f6f4ef;
+  --muted: #777;
+}
+body {
+  font-family: 'League Spartan', sans-serif;
+  background: linear-gradient(180deg, #fffefa 0%, #f3f6f2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+.card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  width: 100%;
+  max-width: 420px;
+  padding: 28px;
+}
+h1 {
+  margin: 0 0 20px;
+  color: var(--olive-700);
+  text-align: center;
+}
+label {
+  font-size: 14px;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 4px;
+}
+input, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+button {
+  width: 100%;
+  background: linear-gradient(90deg, var(--olive-700), var(--olive-500));
+  border: none;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.status {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.hidden {
+  display: none;
+}
+.info {
+  margin-top: 12px;
+  border-top: 1px solid #eee;
+  padding-top: 14px;
+}
+.info h2 {
+  color: var(--olive-700);
+  margin-bottom: 6px;
+}
+.highlight {
+  background: #fff8e6;
+  border: 1px solid #f8e1a1;
+  padding: 10px;
+  border-radius: 10px;
+  color: #6b5a00;
+  font-weight: 600;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Saint Latte</h1>
+    <form id="loginForm">
+      <label for="phone">Teléfono</label>
+      <input id="phone" type="tel" placeholder="5512345678" required />
+      <label for="password">Contraseña</label>
+      <input id="password" type="password" placeholder="Tu contraseña" required />
+      <button type="submit">Ingresar</button>
+    </form>
+    <div class="status" id="status">—</div>
+
+    <div class="info hidden" id="userInfo">
+      <h2 id="userName"></h2>
+      <div>Nutrias: <strong id="userOtters">0</strong></div>
+      <div id="rewardMsg" class="highlight hidden">🎉 ¡Tienes 10 nutrias! Reclama una bebida gratis.</div>
+      <label for="notes">Notas:</label>
+      <textarea id="notes" placeholder="Notas del cliente..."></textarea>
+      <button id="saveNotes">Guardar notas</button>
+    </div>
+  </div>
+
+<script>
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/TU_ID/exec";
+
+const form = document.getElementById('loginForm');
+const statusEl = document.getElementById('status');
+const userInfo = document.getElementById('userInfo');
+const userName = document.getElementById('userName');
+const userOtters = document.getElementById('userOtters');
+const notesArea = document.getElementById('notes');
+const rewardMsg = document.getElementById('rewardMsg');
+const saveNotesBtn = document.getElementById('saveNotes');
+let currentPhone = null;
+
+form.addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  setStatus('Verificando...');
+  const phone = document.getElementById('phone').value.trim();
+  const password = document.getElementById('password').value.trim();
+  currentPhone = phone;
+
+  try {
+    const body = new URLSearchParams({ action: 'login', phone, password });
+    const res = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body
+    });
+    const data = await res.json();
+    if (data.success) {
+      setStatus('Inicio de sesión correcto.');
+      form.classList.add('hidden');
+      userInfo.classList.remove('hidden');
+      userName.textContent = data.name || '(Sin nombre)';
+      userOtters.textContent = data.otters;
+      notesArea.value = data.notes || '';
+
+      if (parseInt(data.otters) >= 10) {
+        rewardMsg.classList.remove('hidden');
+      } else {
+        rewardMsg.classList.add('hidden');
+      }
+    } else {
+      setStatus(data.message || 'Teléfono o contraseña incorrectos.');
+    }
+  } catch (err) {
+    console.error(err);
+    setStatus('Error al conectar con el servidor.');
+  }
+});
+
+saveNotesBtn.addEventListener('click', async () => {
+  const newNotes = notesArea.value.trim();
+  if (!currentPhone) return;
+  setStatus('Guardando notas...');
+  try {
+    const body = new URLSearchParams({
+      action: 'register',  // reutiliza endpoint de registro (actualiza si ya existe)
+      phone: currentPhone,
+      notes: newNotes
+    });
+    const res = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body
+    });
+    const json = await res.json();
+    if (json.success) {
+      setStatus('Notas actualizadas.');
+    } else {
+      setStatus('Error al actualizar notas.');
+    }
+  } catch (err) {
+    console.error(err);
+    setStatus('Error al conectar.');
+  }
+});
+
+function setStatus(msg) {
+  statusEl.textContent = msg;
+}
+</script>
+</body>
+</html>
